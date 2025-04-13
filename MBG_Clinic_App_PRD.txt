@@ -1,0 +1,85 @@
+
+📄 Product Requirements Document (PRD)
+Project Name: MBG Clinic Desktop App
+Version: 1.0 (in development)
+Date: April 13, 2025
+
+1. 📘 Overview
+This application is a standalone desktop app for small clinics to manage patient records, visits, follow-up care, and simple reporting. It is built with Python (Tkinter UI) and SQLite to offer a lightweight, install-free experience on Windows PCs, replacing an Excel-based workflow.
+
+The app ensures referential integrity, supports data backups and sharing, and will eventually be packaged into a single `.exe` file with the database stored as a separate file for flexibility.
+
+2. 🎯 Goals
+- Replace Excel-based tracking with a structured database
+- Allow non-technical users to view, enter, and edit data
+- Ensure data integrity through relational design
+- Keep `.db` file separate for backup, versioning, or multi-user handoff
+- Package into a `.exe` for easy distribution
+- Provide basic clinic reports and filtering tools
+
+3. 🖥 Target Platform
+- Windows 10/11 PCs
+- No installation required (distributed as `.exe`)
+- Python version for testing and dev
+
+4. 🧱 Architecture
+- Language: Python 3.11+
+- UI Framework: Tkinter
+- Database: SQLite 3 (`clinic_data.db`)
+- Packaging: PyInstaller for `.exe` generation
+
+5. 🗃 Data Model
+
+Patients
+| Field         | Type   | Notes               |
+|---------------|--------|---------------------|
+| mrn           | TEXT   | Primary Key         |
+| name          | TEXT   |                     |
+| age           | TEXT   | e.g. "18 m.o"       |
+| translator    | TEXT   | e.g. "Yes, Spanish" |
+
+Visits
+| Field         | Type   | Notes                           |
+|---------------|--------|----------------------------------|
+| visit_id      | INT    | Primary Key (autoincrement)      |
+| mrn           | TEXT   | Foreign Key → Patients(mrn)      |
+| visit_date    | TEXT   | Formatted string (for now)       |
+| physician     | TEXT   | Initials or dropdown (optional)  |
+| last_cx       | TEXT   | Culture/lab history              |
+| due_notes     | TEXT   | List of tasks/labs               |
+| ogtt          | TEXT   | Optional lab                     |
+
+Followups
+| Field         | Type   | Notes                             |
+|---------------|--------|-----------------------------------|
+| visit_id      | INT    | FK to Visits (1:1 relationship)   |
+| opth          | TEXT   | e.g. "Followed by Opth"           |
+| modulator     | TEXT   | e.g. "On Kalydeco"                |
+| pft           | TEXT   | Optional                          |
+| registry      | TEXT   | e.g. "Y", "Needs consent"         |
+
+6. 🖱 Key Features (Planned)
+| Feature                       | Status       |
+|------------------------------|--------------|
+| View all patients            | ✅ Done       |
+| Add/edit/delete patients     | 🛠 In progress |
+| View visit history by patient| 🛠 In progress |
+| Add/edit/delete visits       | 🛠 In progress |
+| Edit follow-up info          | 🛠 In progress |
+| Reference table mgmt         | 🔜 Planned     |
+| Basic reporting              | 🔜 Planned     |
+| Excel import (one-time)      | ✅ Done       |
+| Standalone `.exe` build      | 🔜 Planned     |
+
+7. 📦 File Structure (Output Example)
+clinic_app/
+├── main.exe             # Standalone app
+├── clinic_data.db       # SQLite database
+├── /assets              # Icons or future UI assets
+└── reports/             # (Optional) Exported reports
+
+8. 🧪 Testing & Validation
+- Manual testing for data integrity (MRN links, deletions)
+- Verify visit records tie correctly to patients
+- Ensure DB file remains compatible when moved/shared
+- GUI tested on Windows (and optionally Mac dev environment)
